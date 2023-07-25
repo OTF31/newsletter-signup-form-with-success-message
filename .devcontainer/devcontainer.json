@@ -1,0 +1,5 @@
+{
+  "dockerFile": "Dockerfile",
+  "runArgs": ["--name", "newsletter-signup-form-with-success-message"],
+  "forwardPorts": [5173]
+}
