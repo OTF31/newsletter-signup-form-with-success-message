@@ -14,6 +14,7 @@ const TextInput: FC<Props> = props => {
 
       return {
         input: {
+          fontSize: theme.fontSizes.md,
           backgroundColor: error ? rgba(vermellion[6], 0.15) : 'transparent',
           color: error ? vermellion[6] : darkNavy[6],
           borderColor: error ? vermellion[6] : rgba(sambucus[6], 0.25),

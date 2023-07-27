@@ -8,6 +8,7 @@ const Button: FC<Props> = props => {
     bg = 'darkNavy',
     size = 'xl',
     radius = 'md',
+    fz = 'md',
     styles = theme => ({
       root: {
         '&:hover': {
@@ -20,7 +21,7 @@ const Button: FC<Props> = props => {
   const { children, ...rest } = props;
 
   return (
-    <MButton {...{ bg, size, radius, styles }} {...rest}>
+    <MButton {...{ bg, size, radius, fz, styles }} {...rest}>
       {children}
     </MButton>
   );
