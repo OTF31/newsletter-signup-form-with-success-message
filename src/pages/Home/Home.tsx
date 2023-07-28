@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   AppShell,
   Box,
@@ -11,17 +12,37 @@ import {
   Text,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 import { ReactComponent as IconList } from '@/assets/images/icon-list.svg';
 import { ReactComponent as IconSuccess } from '@/assets/images/icon-success.svg';
-import ilustrationMobile from '@/assets/images/illustration-sign-up-mobile.svg';
 import ilustrationDesktop from '@/assets/images/illustration-sign-up-desktop.svg';
+import ilustrationMobile from '@/assets/images/illustration-sign-up-mobile.svg';
 import Button from '@/components/Button';
 import TextInput from '@/components/TextInput';
+import { FormData } from './Home.types';
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .email('Oops! Please check your email')
+    .required('Oops! Please check your email'),
+});
 
 const Home = () => {
+  const { control, handleSubmit, getValues, reset } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues: { email: '' },
+    resolver: yupResolver(schema),
+  });
   const [opened, { open, close }] = useDisclosure(false);
   const desktop = useMediaQuery('(min-width: 1440px)');
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+    open();
+  };
 
   return (
     <AppShell
@@ -76,9 +97,29 @@ const Home = () => {
                 </Stack>
               </Stack>
               <Stack spacing={0}>
-                <TextInput label='Email address' placeholder='email@company.com' />
+                <Controller
+                  control={control}
+                  name='email'
+                  render={props => {
+                    const { field, fieldState } = props;
+                    const { value, onChange } = field;
+                    const { error } = fieldState;
+
+                    return (
+                      <TextInput
+                        value={value}
+                        onChange={onChange}
+                        label='Email address'
+                        placeholder='email@company.com'
+                        error={error?.message}
+                      />
+                    );
+                  }}
+                />
                 <Space h={16} />
-                <Button onClick={open}>Subscribe to monthly newsletter</Button>
+                <Button onClick={handleSubmit(onSubmit)}>
+                  Subscribe to monthly newsletter
+                </Button>
               </Stack>
             </Stack>
           </Flex>
@@ -103,10 +144,17 @@ const Home = () => {
             A confirmation email has been sent to
             <Text component='span' weight={700}>
               {' '}
-              ash@loremcompany.com
+              {getValues('email')}
             </Text>
             . Please open it and click the button inside to confirm your subscription
-            <Button fullWidth mt={{ base: 250, xl: 40 }} onClick={close}>
+            <Button
+              fullWidth
+              mt={{ base: 250, xl: 40 }}
+              onClick={() => {
+                close();
+                reset();
+              }}
+            >
               Dismiss message
             </Button>
           </Text>
