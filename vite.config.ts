@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
+  base: '/newsletter-signup-form-with-success-message/',
   plugins: [react(), svgr()],
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
 });
